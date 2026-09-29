@@ -21,8 +21,8 @@ Skills need code execution, and are available on the Free, Pro, Max, Team and En
    `zip -r term-descriptions.zip term-descriptions`
 2. In Claude, go to **Settings > Capabilities** and make sure code execution is on. On Team and
    Enterprise plans an owner turns skills on for the organisation first.
-3. Go to **Customize > Skills**.
-4. Click **+**, then **+ Create skill**, then **Upload a skill**, and choose the ZIP.
+3. Still in **Settings**, choose **Skills** under **Customize**.
+4. Click **+ Add** at the top right, choose to upload a skill, and pick the ZIP.
 5. Make sure the skill's toggle is on.
 
 Claude then uses the skill when a conversation matches its description. For this one, upload the CSV
