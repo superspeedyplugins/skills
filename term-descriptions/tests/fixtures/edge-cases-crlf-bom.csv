@@ -1,0 +1,15 @@
+﻿terms.term_id,taxonomy,ssi_source_site,terms.name,terms.slug,term_taxonomy.parent,parent_path,term_taxonomy.count,term_taxonomy.description,termmeta.zzd_seo_title,termmeta.sort_order,ssitd_findings,ssitd_group,ssitd_group_text
+201,product_tag,https://shop.example.com,"'-10°C Sleeping Bags",10c-sleeping-bags,0,"'-10°C Sleeping Bags",4,"'=HYPERLINK(""http://example.com"",""click"")","'+Warm bags, ""rated"" to -10°C",-5,placeholder,,
+202,product_tag,https://shop.example.com,'@home,at-home,0,'@home,2,,,,missing,,
+203,product_tag,https://shop.example.com,"Café & Bistro Sets",cafe-bistro-sets,0,"Café & Bistro Sets",7,"<p>Line one,
+line two with ""quotes"", and a comma.</p>
+<ul>
+<li>Übergrößen</li>
+</ul>","SEO: café, bistro",3,template,template-aa01,"Shop {name}, the best {name} around."
+204,product_tag,https://shop.example.com,"Tents ⛺",tents-emoji,0,"Tents ⛺",1,"<p>Windows line
+ending inside a cell.</p>","Multi
+line meta",,template,template-aa01,"Shop {name}, the best {name} around."
+205,product_tag,https://shop.example.com,Spaces,spaces,0,Spaces,0,"   "," leading and trailing ",,missing,,
+206,product_tag,https://shop.example.com,"Tab	Name",tab-name,0,"Tab	Name",0,"'	Tabbed description",,0,short,,
+207,product_tag,https://shop.example.com,Plain,plain,0,Plain,12,NoQuotesNeeded,x,10,name_only,,
+208,product_tag,https://shop.example.com,"Quote ""Mark""",quote-mark,0,"Quote ""Mark""",3,"""""","""",,placeholder,,
