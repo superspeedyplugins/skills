@@ -7,6 +7,7 @@ Claude reads the instructions when a task calls for them and runs the scripts it
 | Skill | What it does |
 |---|---|
 | [`term-descriptions`](term-descriptions/) | Rewrites weak or repetitive category and tag descriptions in a term CSV downloaded from the Data tab of Super Speedy Imports, so each one is distinct and factual, and checks that nothing else in the file changed before it goes back through **+ New Import** |
+| [`parallel-dev`](parallel-dev/) | Gives every AI agent, branch or test suite its own isolated local WordPress site at `<scenario>.<plugin>.localhost`, created in seconds on native nginx, PHP-FPM and MariaDB, so a half-saved file in one plugin cannot break the site another agent is testing. Also tells the agent to load test data in bulk rather than with one WP-CLI call per product. Needs an agent that runs shell commands on your machine, such as Claude Code; it does not work in claude.ai. The one-time server setup is in [`setup.md`](parallel-dev/setup.md) |
 
 Each skill follows the open [Agent Skills specification](https://agentskills.io/specification) and
 uses only the frontmatter fields that claude.ai uploads accept (`name`, `description`, `license`,
@@ -68,9 +69,14 @@ python3 term-descriptions/scripts/term_csv.py validate original.csv rewritten.cs
 
 ```
 python3 term-descriptions/tests/run_tests.py
+parallel-dev/tests/run-tests.sh
 ```
 
-Python 3 standard library only. The tests drive the script as the skill does, on a real Super Speedy
+The `parallel-dev` tests start their own unprivileged nginx and PHP-FPM from the skill's config templates on
+port 18081, then create, serve, break, reset and delete real sites with the skill's scripts. They need the
+same packages as the skill and touch no system config.
+
+The `term-descriptions` tests use the Python 3 standard library only. They drive the script as the skill does, on a real Super Speedy
 Imports term export and on synthetic files covering byte order marks, CRLF line endings, embedded
 newlines, quotes, commas and formula-escaped cells.
 
