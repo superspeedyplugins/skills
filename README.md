@@ -8,6 +8,7 @@ Claude reads the instructions when a task calls for them and runs the scripts it
 |---|---|
 | [`term-descriptions`](term-descriptions/) | Rewrites weak or repetitive category and tag descriptions in a term CSV downloaded from the Data tab of Super Speedy Imports, so each one is distinct and factual, and checks that nothing else in the file changed before it goes back through **+ New Import** |
 | [`parallel-dev`](parallel-dev/) | Gives every AI agent, branch or test suite its own isolated local WordPress site at `<scenario>.<plugin>.localhost`, created in seconds on native nginx, PHP-FPM and MariaDB, so a half-saved file in one plugin cannot break the site another agent is testing. Also tells the agent to load test data in bulk rather than with one WP-CLI call per product. Needs an agent that runs shell commands on your machine, such as Claude Code; it does not work in claude.ai. The one-time server setup is in [`setup.md`](parallel-dev/setup.md) |
+| [`plugin-security-review`](plugin-security-review/) | An adversarial security review of a WordPress or WooCommerce plugin. It first builds an evidence bundle (every entry point, input, sink, output, state change, dependency and money path, tied to the exact source revision), then traces each candidate from source to sink and fills a complete security coverage ledger. Writes a dated report into the plugin's `.code-reviews/` folder, which it keeps out of Git. Needs an agent that reads files and runs shell commands, such as Claude Code |
 
 Each skill follows the open [Agent Skills specification](https://agentskills.io/specification) and
 uses only the frontmatter fields that claude.ai uploads accept (`name`, `description`, `license`,
@@ -65,16 +66,29 @@ python3 term-descriptions/scripts/term_csv.py validate original.csv rewritten.cs
 
 `term-descriptions/INSTRUCTIONS.template.md` is the template that `INSTRUCTIONS.md` is built from.
 
+## Where `plugin-security-review` came from
+
+Hakan (`hakan_nedim` on the Super Speedy Plugins Discord), a long-standing customer, shared a plugin review skill
+with us: a single 1,247-line file, itself a portable edition of an agency's in-house review skill. We split it into
+a shared evidence foundation and focused specialist reviews (security, performance, logic, WooCommerce,
+architecture, standards, internationalisation, accessibility, mobile and RTL, wordpress.org compliance, user
+experience and removability), then adapted the security review to run on its own. Thank you, Hakan.
+
 ## Tests
 
 ```
 python3 term-descriptions/tests/run_tests.py
 parallel-dev/tests/run-tests.sh
+node plugin-security-review/tests/prepare-storage.test.mjs
+node plugin-security-review/tests/validate-evidence.test.mjs
 ```
 
 The `parallel-dev` tests start their own unprivileged nginx and PHP-FPM from the skill's config templates on
 port 18081, then create, serve, break, reset and delete real sites with the skill's scripts. They need the
 same packages as the skill and touch no system config.
+
+The `plugin-security-review` tests prove the evidence storage and the bundle validator against temporary Git
+repositories with Node.js alone. They do not run a review.
 
 The `term-descriptions` tests use the Python 3 standard library only. They drive the script as the skill does, on a real Super Speedy
 Imports term export and on synthetic files covering byte order marks, CRLF line endings, embedded
