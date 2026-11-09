@@ -10,8 +10,11 @@ Set `SKILL` to this skill's folder before starting, for example
 
 ## Ubuntu, Debian and WSL2
 
+Tested on a clean Ubuntu 24.04 by `tests/test-setup-ubuntu.sh`, which runs these exact lines.
+
 ```bash
-sudo apt install nginx mariadb-server php-fpm php-mysql php-xml php-mbstring php-curl \
+sudo apt update
+sudo apt install -y nginx mariadb-server php-fpm php-mysql php-xml php-mbstring php-curl \
     php-zip php-gd php-intl unzip curl
 curl -sSLO https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 chmod +x wp-cli.phar && sudo mv wp-cli.phar /usr/local/bin/wp

@@ -79,13 +79,15 @@ experience and removability), then adapted the security review to run on its own
 ```
 python3 term-descriptions/tests/run_tests.py
 parallel-dev/tests/run-tests.sh
+parallel-dev/tests/test-setup-ubuntu.sh   # needs Docker
 node plugin-security-review/tests/prepare-storage.test.mjs
 node plugin-security-review/tests/validate-evidence.test.mjs
 ```
 
 The `parallel-dev` tests start their own unprivileged nginx and PHP-FPM from the skill's config templates on
 port 18081, then create, serve, break, reset and delete real sites with the skill's scripts. They need the
-same packages as the skill and touch no system config.
+same packages as the skill and touch no system config. `test-setup-ubuntu.sh` reads the Ubuntu steps out of
+`setup.md` and runs them, unchanged apart from starting services by hand, on a clean `ubuntu:24.04` container.
 
 The `plugin-security-review` tests prove the evidence storage and the bundle validator against temporary Git
 repositories with Node.js alone. They do not run a review.
