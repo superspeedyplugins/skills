@@ -1,6 +1,6 @@
 ---
 name: one-by-one
-description: Asks the user the decisions work is waiting on one at a time, each with the context and links needed to answer it, recording each answer before asking the next. Use for "one by one" or a backlog of decisions.
+description: Asks the user the decisions that work is waiting on one at a time, each with its context and links, and records each answer before asking the next. Use for "one by one" or a backlog of decisions.
 license: GPL-3.0. Full text at https://www.gnu.org/licenses/gpl-3.0.html
 compatibility: Any Claude surface. Works best in Claude Code or another agent that can read the project's files and commit the answers it records.
 metadata:
