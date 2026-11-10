@@ -9,6 +9,7 @@ Claude reads the instructions when a task calls for them and runs the scripts it
 | [`term-descriptions`](term-descriptions/) | Rewrites weak or repetitive category and tag descriptions in a term CSV downloaded from the Data tab of Super Speedy Imports, so each one is distinct and factual, and checks that nothing else in the file changed before it goes back through **+ New Import** |
 | [`parallel-dev`](parallel-dev/) | Gives every AI agent, branch or test suite its own isolated local WordPress site at `<scenario>.<plugin>.localhost`, created in seconds on native nginx, PHP-FPM and MariaDB, so a half-saved file in one plugin cannot break the site another agent is testing. Also tells the agent to load test data in bulk rather than with one WP-CLI call per product. Needs an agent that runs shell commands on your machine, such as Claude Code; it does not work in claude.ai. The one-time server setup is in [`setup.md`](parallel-dev/setup.md) |
 | [`plugin-security-review`](plugin-security-review/) | An adversarial security review of a WordPress or WooCommerce plugin. It first builds an evidence bundle (every entry point, input, sink, output, state change, dependency and money path, tied to the exact source revision), then traces each candidate from source to sink and fills a complete security coverage ledger. Writes a dated report into the plugin's `.code-reviews/` folder, which it keeps out of Git. Needs an agent that reads files and runs shell commands, such as Claude Code |
+| [`plugin-updates`](plugin-updates/) | Applies waiting plugin updates on a staging site: reads each release's changelog and code changes, measures the site before and after with the free Super Speedy Performance Analysis plugin, finds which plugin slowed a page down, and recommends update, wait or roll back for each. It never touches the live site: it generates a script you run on live yourself, which refuses to change anything unless the site and every plugin version match what was tested. Needs an agent that runs shell commands, such as Claude Code, and WP-CLI on staging |
 
 Each skill follows the open [Agent Skills specification](https://agentskills.io/specification) and
 uses only the frontmatter fields that claude.ai uploads accept (`name`, `description`, `license`,
@@ -82,6 +83,7 @@ parallel-dev/tests/run-tests.sh
 parallel-dev/tests/test-setup-ubuntu.sh   # needs Docker
 node plugin-security-review/tests/prepare-storage.test.mjs
 node plugin-security-review/tests/validate-evidence.test.mjs
+PU_TEST_WP_PATH=/path/to/throwaway/wordpress plugin-updates/tests/run-tests.sh
 ```
 
 The `parallel-dev` tests start their own unprivileged nginx and PHP-FPM from the skill's config templates on
@@ -91,6 +93,10 @@ same packages as the skill and touch no system config. `test-setup-ubuntu.sh` re
 
 The `plugin-security-review` tests prove the evidence storage and the bundle validator against temporary Git
 repositories with Node.js alone. They do not run a review.
+
+The `plugin-updates` tests generate live scripts and run them against a real, throwaway WordPress site with
+real wordpress.org plugins: refusing the wrong site, a version that differs from the one tested and a zip whose
+checksum differs, then updating, backing up and refusing a second run. Never point them at a site you care about.
 
 The `term-descriptions` tests use the Python 3 standard library only. They drive the script as the skill does, on a real Super Speedy
 Imports term export and on synthetic files covering byte order marks, CRLF line endings, embedded
