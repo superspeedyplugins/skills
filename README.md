@@ -11,6 +11,7 @@ Claude reads the instructions when a task calls for them and runs the scripts it
 | [`plugin-security-review`](plugin-security-review/) | An adversarial security review of a WordPress or WooCommerce plugin. It first builds an evidence bundle (every entry point, input, sink, output, state change, dependency and money path, tied to the exact source revision), then traces each candidate from source to sink and fills a complete security coverage ledger. Writes a dated report into the plugin's `.code-reviews/` folder, which it keeps out of Git. Needs an agent that reads files and runs shell commands, such as Claude Code |
 | [`plugin-updates`](plugin-updates/) | Applies waiting plugin updates on a staging site: reads each release's changelog and code changes, measures the site before and after with the free Super Speedy Performance Analysis plugin, finds which plugin slowed a page down, and recommends update, wait or roll back for each. It never touches the live site: it generates a script you run on live yourself, which refuses to change anything unless the site and every plugin version match what was tested. Needs an agent that runs shell commands, such as Claude Code, and WP-CLI on staging |
 | [`one-by-one`](one-by-one/) | When work is waiting on several of your decisions, asks them one at a time instead of in one wall of text: each question with its context, options, a recommendation and full links, and each answer written down before the next question. Works in any Claude surface, including a claude.ai chat |
+| [`woocommerce-performance-diagnosis`](woocommerce-performance-diagnosis/) | Diagnoses a slow WooCommerce store's back end: gathers the store's facts read-only (versions, HPOS, catalogue and order size, autoload, cron and Action Scheduler backlog, object and page cache, largest tables and indexes), measures the key pages with the free Super Speedy Performance Analysis plugin, and writes a Markdown report that ties every finding to its evidence and gives the free fix first. Asks before every change and never changes settings on a live store. Needs an agent that runs shell commands, such as Claude Code, and WP-CLI on the store |
 
 Each skill follows the open [Agent Skills specification](https://agentskills.io/specification) and
 uses only the frontmatter fields that claude.ai uploads accept (`name`, `description`, `license`,
@@ -85,6 +86,7 @@ parallel-dev/tests/test-setup-ubuntu.sh   # needs Docker
 node plugin-security-review/tests/prepare-storage.test.mjs
 node plugin-security-review/tests/validate-evidence.test.mjs
 PU_TEST_WP_PATH=/path/to/throwaway/wordpress plugin-updates/tests/run-tests.sh
+WPD_TEST_WP_PATH=/path/to/throwaway/woocommerce woocommerce-performance-diagnosis/tests/run-tests.sh
 ```
 
 The `parallel-dev` tests start their own unprivileged nginx and PHP-FPM from the skill's config templates on
@@ -98,6 +100,12 @@ repositories with Node.js alone. They do not run a review.
 The `plugin-updates` tests generate live scripts and run them against a real, throwaway WordPress site with
 real wordpress.org plugins: refusing the wrong site, a version that differs from the one tested and a zip whose
 checksum differs, then updating, backing up and refusing a second run. Never point them at a site you care about.
+
+The `woocommerce-performance-diagnosis` tests run the store-facts script through WP-CLI on a real, throwaway
+WooCommerce site with HPOS on and some orders: they check its counts against WordPress's own, that the catalogue,
+order and Action Scheduler tables are unchanged afterwards, and that no billing email or last name from the site's
+real orders appears in its output. With Performance Analysis active and one completed run, they also build the
+evidence digest from that real report.
 
 The `term-descriptions` tests use the Python 3 standard library only. They drive the script as the skill does, on a real Super Speedy
 Imports term export and on synthetic files covering byte order marks, CRLF line endings, embedded
