@@ -1,0 +1,16 @@
+{
+  "name": "superspeedyplugins",
+  "description": "Free Agent Skills from Super Speedy Plugins for WordPress and WooCommerce work.",
+  "owner": {
+    "name": "Super Speedy Plugins",
+    "url": "https://www.superspeedyplugins.com/"
+  },
+  "plugins": [
+    {
+      "name": "super-speedy",
+      "source": "./",
+      "description": "Six skills for WordPress and WooCommerce work: performance diagnosis, plugin security review, staged plugin updates, isolated local test sites, term description rewrites and one-at-a-time decisions.",
+      "category": "development"
+    }
+  ]
+}

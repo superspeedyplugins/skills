@@ -1,0 +1,26 @@
+{
+  "name": "super-speedy",
+  "displayName": "Super Speedy Plugins skills",
+  "version": "1.0.0",
+  "description": "Skills for WordPress and WooCommerce work: diagnose a slow WooCommerce store, security-review a plugin, test plugin updates on staging, give each agent its own local test site, rewrite term descriptions, and ask pending decisions one at a time.",
+  "author": {
+    "name": "Super Speedy Plugins",
+    "url": "https://www.superspeedyplugins.com/"
+  },
+  "homepage": "https://github.com/superspeedyplugins/skills",
+  "repository": "https://github.com/superspeedyplugins/skills",
+  "license": "GPL-3.0",
+  "keywords": [
+    "wordpress",
+    "woocommerce",
+    "performance",
+    "security-review",
+    "plugin-updates",
+    "staging",
+    "wp-cli"
+  ],
+  "icon": "./.claude-plugin/icon.png",
+  "skills": [
+    "./"
+  ]
+}

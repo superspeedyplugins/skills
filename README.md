@@ -33,9 +33,42 @@ Skills need code execution, and are available on the Free, Pro, Max, Team and En
 Claude then uses the skill when a conversation matches its description. For this one, upload the CSV
 and ask Claude to rewrite the term descriptions.
 
-## Install a skill in Claude Code
+## Install all six in Claude Code as a plugin
 
-Copy the skill folder into one of these:
+This repository is also a Claude Code plugin marketplace, `superspeedyplugins`, holding one plugin,
+`super-speedy`, that contains all six skills. Inside a Claude Code session, run:
+
+```
+/plugin marketplace add superspeedyplugins/skills
+/plugin install super-speedy@superspeedyplugins
+```
+
+On Claude Code 2.1.275 or later, one command does both:
+
+```
+/plugin install super-speedy --marketplace superspeedyplugins/skills
+```
+
+From your shell instead, `claude plugin marketplace add superspeedyplugins/skills` and then
+`claude plugin install super-speedy@superspeedyplugins`. Restart Claude Code, or run `/reload-plugins`,
+to load it.
+
+Plugin skills carry the plugin's name, so you run them as `/super-speedy:term-descriptions`,
+`/super-speedy:parallel-dev`, `/super-speedy:plugin-security-review`, `/super-speedy:plugin-updates`,
+`/super-speedy:one-by-one` and `/super-speedy:woocommerce-performance-diagnosis`. Claude also uses each
+one on its own when a request matches its description.
+
+To get later versions, run `claude plugin update super-speedy@superspeedyplugins`, or turn on
+auto-update for the marketplace in `/plugin`. To remove it, `claude plugin uninstall super-speedy@superspeedyplugins`.
+
+The plugin adds skills only: no hooks, MCP servers, commands, agents or background processes. When a
+skill runs a script, Claude runs it on your computer through its usual permission prompts. The scripts
+work on the sites and repositories you point them at, and download WordPress themes and plugin versions
+from wordpress.org; none of them sends data to Super Speedy Plugins.
+
+## Install a skill in Claude Code by copying it
+
+To install one skill without the plugin, copy its folder into one of these:
 
 - `~/.claude/skills/term-descriptions/` to use it in every project on your computer;
 - `.claude/skills/term-descriptions/` inside a project, to use it in that project and share it
@@ -115,9 +148,26 @@ newlines, quotes, commas and formula-escaped cells.
 
 GPL 3. See [LICENSE](LICENSE).
 
+## For maintainers: plugin layout and versions
+
+The repository root is both the marketplace root and the plugin root. `.claude-plugin/marketplace.json`
+lists the plugin with `"source": "./"`, and `.claude-plugin/plugin.json` sets `"skills": ["./"]`, so
+every `<skill>/SKILL.md` folder at the root is part of the plugin without moving anything. A new skill
+folder at the root joins the plugin automatically; add it to the table above.
+
+`plugin.json` sets `version`. Raise it in every commit that changes a skill, or users who installed the
+plugin keep the old copy: `claude plugin update` compares that field, not the commit. Run
+`claude plugin validate --strict --profile directory .` before pushing.
+
 ## Sources for the install steps
 
-Checked on 30 September 2026:
+Plugin and marketplace steps checked on 19 November 2026:
+
+- [Create a marketplace](https://code.claude.com/docs/en/plugin-marketplaces) and the [marketplace reference](https://code.claude.com/docs/en/plugins/marketplace-reference.md)
+- [Plugin manifest reference](https://code.claude.com/docs/en/plugins-reference) (`skills` paths, `"."` as the plugin root)
+- [Publish and distribute a plugin](https://code.claude.com/docs/en/plugins/publish.md) (install commands and updates)
+
+Skill steps checked on 30 September 2026:
 
 - [Use skills in Claude](https://support.claude.com/en/articles/12512180-use-skills-in-claude) (claude.ai upload steps and plans)
 - [How to create custom skills](https://support.claude.com/en/articles/12512198-how-to-create-custom-skills) (ZIP layout, 200-character description limit)
